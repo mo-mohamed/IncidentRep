@@ -19,6 +19,11 @@ defmodule IncidentReportWeb.Router do
     get "/", PageController, :index
   end
 
+   scope "/api", IncidentReportWeb.API, as: :api do
+    pipe_through :api
+    resources "/incident", IncidentController, only: [:create]
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", IncidentReportWeb do
   #   pipe_through :api
