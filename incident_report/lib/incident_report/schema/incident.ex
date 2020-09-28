@@ -19,6 +19,16 @@ defmodule IncidentReport.Schema.Incident do
     :status
   ]
 
+  @required_attributes_create [
+    :name,
+    :email,
+    :phone_number,
+    :image_url,
+    :status,
+    :country_id,
+    :status
+  ]
+
   schema "incident" do
     field :name, :string
     field :relation, :string
@@ -29,6 +39,7 @@ defmodule IncidentReport.Schema.Incident do
     field :notes, :string
     field :status, IncidentStatus, default: "ready"
     field :number_processed, :integer, default: 0
+    field :identifier, :binary_id, default: Ecto.UUID.generate()
     belongs_to(:country, IncidentReport.Schema.Country)
     timestamps()
   end
@@ -37,6 +48,7 @@ defmodule IncidentReport.Schema.Incident do
   def changeset(%__MODULE__{inserted_at: inserted_at} = incident, attrs) when is_nil(inserted_at) do
     incident
     |> cast(attrs, @all_attributes_create)
+    |> validate_required(@required_attributes_create)
     |> foreign_key_constraint(:country_id)
     |> validate_length(:name, max: 50, message: "name should be max of 50 characters")
     |> validate_length(:relation, max: 20, message: "relation should be max of 20 characters")

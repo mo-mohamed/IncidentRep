@@ -30,6 +30,7 @@ defmodule IncidentReport.Schema.IncidentReport do
       field :city, :string
       field :district, :string
       field :nearest_landmark, :string
+      field :identifier, :binary_id, default: Ecto.UUID.generate()
       belongs_to(:country, IncidentReport.Schema.Country)
       timestamps()
     end
