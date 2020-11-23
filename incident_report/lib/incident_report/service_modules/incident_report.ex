@@ -4,7 +4,8 @@ defmodule IncidentReport.Service.IncidentReport do
   def all, do: DBContext.all_incident_reports()
   def all(params), do: DBContext.all_incident_reports(params)
 
-  def changeset(params), do: DBContext.change_incident(params)
+  def changeset(struct, params),
+    do: IncidentReport.Schema.IncidentReport.changeset(struct, params)
 
   def create(params), do: DBContext.create_incident_report(params)
   def create!(params), do: DBContext.create_incident_report!(params)
@@ -17,9 +18,4 @@ defmodule IncidentReport.Service.IncidentReport do
 
   def update(struct, params), do: DBContext.update_incident_report(struct, params)
   def update!(struct, params), do: DBContext.update_incident_report!(struct, params)
-
-
-
-
-
 end

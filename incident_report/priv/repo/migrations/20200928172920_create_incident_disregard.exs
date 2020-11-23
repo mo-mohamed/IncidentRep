@@ -9,9 +9,9 @@ defmodule IncidentReport.Repo.Migrations.CreateIncidentDisregard do
       add(:disregard_reason, :string)
       timestamps()
     end
-end
+  end
 
-def down do
-   drop(table(:incident_disregard))
-end
+  def down do
+    drop(table(:incident_disregard))
+  end
 end

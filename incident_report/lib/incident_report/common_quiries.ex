@@ -1,6 +1,6 @@
 # defmodule IncidentReport.DAL.CommonQueries do
 #   alias IncidentReport.Repo
-#   import Ecto.Query, only: [preload: 2, select: 3, from: 2]
+#   import Ecto.Query
 #   #use EventBus.EventSource
 
 #   @moduledoc false
@@ -187,25 +187,25 @@
 #     end
 #   end
 
-#   def get(module, id, company_id, user_role, opts \\ []) do
-#     preloads = Keyword.get(opts, :preloads, [])
-#     select_block = Keyword.get(opts, :select, [])
-#     return_type = Keyword.get(opts, :type, :struct)
+#   # def get(module, id, company_id, user_role, opts \\ []) do
+#   #   preloads = Keyword.get(opts, :preloads, [])
+#   #   select_block = Keyword.get(opts, :select, [])
+#   #   return_type = Keyword.get(opts, :type, :struct)
 
-#     queryable =
-#       module
-#       |> select_function(return_type, select_block)
-#       |> Bodyguard.scope(company_id, user_role)
-#       |> preload(^preloads)
+#   #   queryable =
+#   #     module
+#   #     |> select_function(return_type, select_block)
+#   #     |> Bodyguard.scope(company_id, user_role)
+#   #     |> preload(^preloads)
 
-#     with {:ok, uuid} <- Ecto.UUID.cast(id),
-#          result when not is_nil(result) <- Repo.get(queryable, uuid) do
-#       {:ok, result}
-#     else
-#       :error -> {:error, :bad_request}
-#       _ -> {:error, :not_found}
-#     end
-#   end
+#   #   with {:ok, uuid} <- Ecto.UUID.cast(id),
+#   #        result when not is_nil(result) <- Repo.get(queryable, uuid) do
+#   #     {:ok, result}
+#   #   else
+#   #     :error -> {:error, :bad_request}
+#   #     _ -> {:error, :not_found}
+#   #   end
+#   # end
 
 #   def get_by!(module, params, opts \\ [])
 
@@ -245,24 +245,6 @@
 #     end
 #   end
 
-#   def get_by(module, %{} = params, company_id, user_role, opts \\ []) do
-#     preloads = Keyword.get(opts, :preloads, [])
-#     select_block = Keyword.get(opts, :select, [])
-#     return_type = Keyword.get(opts, :type, :struct)
-
-#     result =
-#       module
-#       |> select_function(return_type, select_block)
-#       |> Bodyguard.scope(company_id, user_role)
-#       |> preload(^preloads)
-#       |> Repo.get_by(params)
-
-#     case result do
-#       nil -> {:error, :not_found}
-#       _ -> {:ok, result}
-#     end
-#   end
-
 #   def find_by(module, params, opts \\ []) do
 #     preloads = Keyword.get(opts, :preloads, [])
 #     select_block = Keyword.get(opts, :select, [])
@@ -270,7 +252,7 @@
 #     order_block = Keyword.get(opts, :order_by, [])
 #     distinct_block = Keyword.get(opts, :distinct, [])
 
-#     paginate = Keyword.get(opts, :paginate, nil)
+#     #paginate = Keyword.get(opts, :paginate, nil)
 
 #     query =
 #       module
@@ -279,11 +261,7 @@
 #       |> Ecto.Query.where(^params)
 #       |> Ecto.Query.distinct(^distinct_block)
 #       |> Ecto.Query.order_by(^order_block)
-
-#     case paginate do
-#       %{} = page_meta -> query |> Repo.paginate(page_meta)
-#       _ -> query |> Repo.all()
-#     end
+#       |> Repo.all()
 #   end
 
 #   def find_by(module, params, company_id, user_role, opts \\ []) do
@@ -429,19 +407,19 @@
 #   #   |> Repo.paginate(page: page_number, page_size: page_size)
 #   # end
 
-#   def update(module, id, company_id, user_role, %{} = attrs) when is_binary(id) do
-#     module
-#     |> get(id, company_id, user_role, [])
-#     |> case do
-#       {:ok, struct} ->
-#         struct
-#         |> module.changeset(attrs)
-#         |> Repo.update()
+#   # def update(module, id, company_id, user_role, %{} = attrs) when is_binary(id) do
+#   #   module
+#   #   |> get(id, company_id, user_role, [])
+#   #   |> case do
+#   #     {:ok, struct} ->
+#   #       struct
+#   #       |> module.changeset(attrs)
+#   #       |> Repo.update()
 
-#       res ->
-#         res
-#     end
-#   end
+#   #     res ->
+#   #       res
+#   #   end
+#   # end
 
 #   def update(module, arg, %{} = attrs) do
 #     arg

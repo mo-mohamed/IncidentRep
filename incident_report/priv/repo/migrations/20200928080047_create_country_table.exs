@@ -10,14 +10,11 @@ defmodule IncidentReport.Repo.Migrations.CreateCountryTable do
       timestamps()
     end
 
-     create(unique_index(:country, [:name, :code, :phone_code]))
+    create(unique_index(:country, [:name, :code, :phone_code]))
   end
 
   def down do
     drop(unique_index(:country, [:name, :code, :phone_code]))
     drop(table(:country))
-  
   end
-
-
 end
