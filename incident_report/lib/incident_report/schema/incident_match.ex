@@ -3,12 +3,12 @@ defmodule IncidentReport.Schema.IncidentMatch do
   @primary_key {:id, :id, autogenerate: true}
   @timestamps_opts [type: :utc_datetime]
 
-  alias IncidentReport.Schema.{Incident, IncidentReport}
+  alias IncidentReport.Schema.{Incident, IncidentNotification}
 
   schema "incident_match" do
     field :confident_level, :float
     belongs_to(:incident, Incident)
-    belongs_to(:incident_reports, IncidentReport)
+    belongs_to(:incident_reports, IncidentNotification)
     timestamps()
   end
 end

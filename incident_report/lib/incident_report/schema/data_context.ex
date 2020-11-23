@@ -4,7 +4,7 @@ defmodule IncidentReport.DAL.Context do
   alias IncidentReport.Schema.{
     Country,
     Incident,
-    IncidentReport,
+    IncidentNotification,
     IncidentMatch,
     IncidentDisregard
   }
@@ -14,7 +14,7 @@ defmodule IncidentReport.DAL.Context do
   using_repo(Repo) do
     # resource(Country)
     resource(Incident)
-    resource(IncidentReport)
+    resource(IncidentNotification)
     resource(IncidentMatch)
     resource(IncidentDisregard)
   end

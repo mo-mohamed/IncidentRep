@@ -2,23 +2,24 @@ defmodule IncidentReport.Schema.IncidentTest do
   use IncidentReportWeb.ConnCase
   import IncidentReport.Factory
   alias IncidentReport.Schema
-  alias IncidentReport.Service.Incident
+  alias IncidentReport.Service.IncidentNotification
 
   describe "Create" do
     test "changeset" do
       country = insert(:country, %{})
 
-      incident_params = %{
+      incident_report_params = %{
         name: "Mostafa Mohamed",
-        relation: "Father",
         email: "mostafa@mail.com",
         phone_number: "phone_number",
         image_url: "URL",
         country_id: country.id,
-        notes: "some notes"
+        notes: "some notes",
+        district: "district area",
+        nearest_landmark: "play ground"
       }
 
-      result = Incident.create(incident_params)
+      result = IReport.create(incident_report_params)
       assert {:ok, %Schema.Incident{} = incident} = result
       # default values
       assert incident.status == "ready"
@@ -131,7 +132,7 @@ defmodule IncidentReport.Schema.IncidentTest do
         "image_url" => nil
       }
 
-      assert {:error, changeset} = Incident.update(incident, update_params) |> IO.inspect()
+      assert {:error, changeset} = Incident.update(incident, update_params)
       assert changeset.errors |> List.first() == {:image_url, {"can't be blank", [validation: :required]}}
     end
   end

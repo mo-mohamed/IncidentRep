@@ -1,25 +1,35 @@
-defmodule IncidentReport.Schema.IncidentReport do
+defmodule IncidentReport.Schema.IncidentNotification do
   use Ecto.Schema
   import Ecto.Changeset
-  import EctoEnum
   @primary_key {:id, :id, autogenerate: true}
   @timestamps_opts [type: :utc_datetime]
   @foreign_key_type :id
 
-  @all_attributes_create [
+  @all_attributes [
     :name,
     :email,
     :phone_number,
     :image_url,
     :notes,
-    :status,
     :country_id,
     :city,
     :district,
     :nearest_landmark
   ]
 
-  schema "incident_report" do
+  @required_attributes [
+    :name,
+    :email,
+    :phone_number,
+    :image_url,
+    :notes,
+    :country_id,
+    :city,
+    :district,
+    :nearest_landmark
+  ]
+
+  schema "incident_notification" do
     field :name, :string
     field :email, :string
     field :phone_number, :string
@@ -37,7 +47,8 @@ defmodule IncidentReport.Schema.IncidentReport do
   @doc false
   def changeset(incident, attrs) do
     incident
-    |> cast(attrs, @all_attributes_create)
+    |> cast(attrs, @all_attributes)
+    |> validate_required(@required_attributes)
     |> foreign_key_constraint(:country_id)
     |> validate_length(:name, max: 50, message: "name should be max of 50 characters")
     |> validate_length(:phone_number, max: 20, message: "city should be max of 20 characters")

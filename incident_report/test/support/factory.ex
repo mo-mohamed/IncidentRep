@@ -25,4 +25,21 @@ defmodule IncidentReport.Factory do
       number_processed: 0
     }
   end
+
+  def incident_notification_factory do
+    country = insert(:country, %{})
+
+    %IncidentReport.Schema.IncidentNotification{
+      name: "Mostafa Mohamed",
+      email: "mostafa@mail.com",
+      phone_number: "phone_number",
+      image_url: "URL",
+      country_id: country.id,
+      notes: "some notes",
+      is_verified: false,
+      city: "Irving",
+      district: "district",
+      nearest_landmark: "nearesr landmark"
+    }
+  end
 end
