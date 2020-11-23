@@ -8,7 +8,7 @@ defmodule IncidentReport.Schema.IncidentMatch do
   schema "incident_match" do
     field :confident_level, :float
     belongs_to(:incident, Incident)
-    belongs_to(:incident_reports, IncidentNotification)
+    belongs_to(:incident_notification, IncidentNotification)
     timestamps()
   end
 end
