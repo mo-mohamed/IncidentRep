@@ -8,7 +8,7 @@ defmodule IncidentReport.Repo.Migrations.CreateIncidentTable do
       add(:relation, :string)
       add(:email, :string, null: false)
       add(:phone_number, :string, null: false)
-      add(:image_url, :string, null: false)
+      add(:image_url, :string)
       add(:is_verified, :boolean, null: false, default: false)
       add(:notes, :string)
       add(:status, :string, null: false, default: "ready")
