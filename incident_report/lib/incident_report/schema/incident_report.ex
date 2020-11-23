@@ -3,10 +3,10 @@ defmodule IncidentReport.Schema.IncidentReport do
     use Ecto.Schema
     import Ecto.Changeset
     import EctoEnum
-    @primary_key {:id, :id, autogenerate: true} 
+    @primary_key {:id, :id, autogenerate: true}
     @timestamps_opts [type: :utc_datetime]
     @foreign_key_type :id
-  
+
      @all_attributes_create [
       :name,
       :email,
@@ -19,7 +19,7 @@ defmodule IncidentReport.Schema.IncidentReport do
       :district,
       :nearest_landmark
     ]
-  
+
     schema "incident_report" do
       field :name, :string
       field :email, :string
@@ -34,9 +34,9 @@ defmodule IncidentReport.Schema.IncidentReport do
       belongs_to(:country, IncidentReport.Schema.Country)
       timestamps()
     end
-  
+
     @doc false
-    def changeset(%__MODULE__{inserted_at: inserted_at} = incident, attrs) when is_nil(inserted_at) do
+    def changeset(incident, attrs) do
       incident
       |> cast(attrs, @all_attributes_create)
       |> foreign_key_constraint(:country_id)

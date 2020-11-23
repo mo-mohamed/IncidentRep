@@ -2,8 +2,8 @@ defmodule IncidentReport.Schema.Incident do
 
   use Ecto.Schema
   import Ecto.Changeset
-  import EctoEnum
-  @primary_key {:id, :id, autogenerate: true} 
+
+  @primary_key {:id, :id, autogenerate: true}
   @timestamps_opts [type: :utc_datetime]
   @foreign_key_type :id
 
@@ -45,7 +45,9 @@ defmodule IncidentReport.Schema.Incident do
   end
 
   @doc false
-  def changeset(%__MODULE__{inserted_at: inserted_at} = incident, attrs) when is_nil(inserted_at) do
+  def changeset(incident, attrs) do
+    IO.inspect(incident, label: "inc")
+    IO.inspect(attrs, label: "attrs")
     incident
     |> cast(attrs, @all_attributes_create)
     |> validate_required(@required_attributes_create)

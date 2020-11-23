@@ -2,10 +2,11 @@ use Mix.Config
 
 # Configure your database
 config :incident_report, IncidentReport.Repo,
-  username: "ir_user",
-  password: "P@ssw0rd",
+  username: "incident_user",
+  password: "P@ssw0rd1806",
   database: "incident_report_dev",
   hostname: "localhost",
+  port: 3306,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

@@ -1,6 +1,8 @@
 defmodule IncidentReport.Schema.IncidentTest do
   use IncidentReportWeb.ConnCase
   import IncidentReport.Factory
+  alias IncidentReport.Schema
+  alias IncidentReport.Service.Incident
 
   test "changeset" do
    country = insert(:country, %{})
@@ -14,8 +16,8 @@ defmodule IncidentReport.Schema.IncidentTest do
        notes: "some notes"
    }
 
-   result = IncidentReport.Schema.Incident.changeset(%IncidentReport.Schema.Incident{}, incident_params) |> IncidentReport.Repo.insert()
-   assert  {:ok, %IncidentReport.Schema.Incident{} = incident} = result
+   result = Incident.create(incident_params)
+   assert  {:ok, %Schema.Incident{} = incident} = result
    # default values
    assert incident.status == "ready"
    assert incident.is_verified == false
@@ -33,8 +35,9 @@ defmodule IncidentReport.Schema.IncidentTest do
         country_id: country.id,
         notes: "some notes"
     }
- 
-    assert {:error, %Ecto.Changeset{} = changeset} = IncidentReport.Schema.Incident.changeset(%IncidentReport.Schema.Incident{}, incident_params) |> IncidentReport.Repo.insert()
+
+    assert {:error, %Ecto.Changeset{} = changeset} = Incident.create(incident_params)
+    refute changeset.valid?
     assert changeset.errors |> List.first() == {:name, {"can't be blank", [validation: :required]}}
    end
 
@@ -48,8 +51,9 @@ defmodule IncidentReport.Schema.IncidentTest do
         country_id: country.id,
         notes: "some notes"
     }
- 
-    assert {:error, %Ecto.Changeset{} = changeset} = IncidentReport.Schema.Incident.changeset(%IncidentReport.Schema.Incident{}, incident_params) |> IncidentReport.Repo.insert()
+
+    assert {:error, %Ecto.Changeset{} = changeset} = Incident.changeset(incident_params)
+    refute changeset.valid?
     assert changeset.errors |> List.first() == {:image_url, {"can't be blank", [validation: :required]}}
    end
 
@@ -66,8 +70,8 @@ defmodule IncidentReport.Schema.IncidentTest do
        status: "invalid-status"
    }
 
-   changeset_result =  IncidentReport.Schema.Incident.changeset(%IncidentReport.Schema.Incident{}, incident_params)
-   refute changeset_result.valid?
-   assert changeset_result.errors |> List.first() == {:status, {"is invalid", [type: IncidentStatus, validation: :cast]}}
+   assert {:error, %Ecto.Changeset{} = changeset} = Incident.create(incident_params)
+   refute changeset.valid?
+   assert changeset.errors |> List.first() == {:status, {"is invalid", [type: IncidentStatus, validation: :cast]}}
   end
 end
