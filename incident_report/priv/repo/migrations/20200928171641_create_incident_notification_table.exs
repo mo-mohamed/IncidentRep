@@ -2,7 +2,7 @@ defmodule IncidentReport.Repo.Migrations.CreateIncidentReportTable do
   use Ecto.Migration
 
   def up do
-    create table(:incident_report, primary_key: false) do
+    create table(:incident_notification, primary_key: false) do
       add(:id, :bigserial, null: false, primary_key: true)
       add(:name, :string, null: false)
       add(:email, :string, null: false)
@@ -20,6 +20,6 @@ defmodule IncidentReport.Repo.Migrations.CreateIncidentReportTable do
   end
 
   def down do
-    drop(table(:incident_report))
+    drop(table(:incident_notification))
   end
 end

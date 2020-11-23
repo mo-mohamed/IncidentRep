@@ -4,7 +4,7 @@ defmodule IncidentReport.Schema.IncidentDisregard do
   @primary_key {:id, :id, autogenerate: true}
   @timestamps_opts [type: :utc_datetime]
 
-  alias IncidentReport.Schema.{Incident, IncidentReport}
+  alias IncidentReport.Schema.{Incident, IncidentNotification}
 
   @all_attributes [
     :reason
@@ -13,7 +13,7 @@ defmodule IncidentReport.Schema.IncidentDisregard do
   schema "incident_disregard" do
     field :reason, :string
     belongs_to(:incident, Incident)
-    belongs_to(:incident_reports, IncidentReport)
+    belongs_to(:incident_reports, IncidentNotification)
     timestamps()
   end
 

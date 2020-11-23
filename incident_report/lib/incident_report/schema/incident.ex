@@ -51,11 +51,10 @@ defmodule IncidentReport.Schema.Incident do
     |> validate_required(@required_attributes_create)
     |> foreign_key_constraint(:country_id)
     |> validate_inclusion(:status, IncidentReportTypes.incident_status())
-    |> validate_length(:name, max: 50, message: "name should be max of 50 characters")
-    |> validate_length(:relation, max: 20, message: "relation should be max of 20 characters")
-    |> validate_length(:phone_number, max: 20, message: "city should be max of 20 characters")
+    |> validate_length(:name, max: 150, message: "name should be max of 150 characters")
+    |> validate_length(:relation, max: 40, message: "relation should be max of 40 characters")
+    |> validate_length(:phone_number, max: 40, message: "city should be max of 40 characters")
     |> validate_length(:image_url, max: 500, message: "state should be max of 500 characters")
     |> validate_length(:notes, max: 500, message: "notes should be max of 500 characters")
-    |> validate_length(:status, max: 500, message: "status should be max of 500 characters")
   end
 end

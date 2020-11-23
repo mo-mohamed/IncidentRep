@@ -5,7 +5,7 @@ defmodule IncidentReport.Repo.Migrations.CreateIncidentDisregard do
     create table(:incident_disregard, primary_key: false) do
       add(:id, :bigserial, null: false, primary_key: true)
       add(:incident_id, references(:incident, on_delete: :nothing), null: false)
-      add(:incident_report_id, references(:incident_report, on_delete: :nothing), null: false)
+      add(:incident_notification_id, references(:incident_notification, on_delete: :nothing), null: false)
       add(:disregard_reason, :string)
       timestamps()
     end
