@@ -4,8 +4,13 @@ defmodule IncidentReport.Service.Incident do
   def all, do: DBContext.all_incidents()
   def all(params), do: DBContext.all_incidents(params)
 
-  def changeset(struct, params), do: IncidentReport.Schema.Incident.changeset(struct, params)
+  def changeset(params),
+    do: IncidentReport.Schema.Incident.changeset(%IncidentReport.Schema.Incident{}, params)
 
+  def changeset(struct, params),
+    do: IncidentReport.Schema.Incident.changeset(struct, params)
+
+  @spec create(map) :: {:error, Ecto.Changeset.t()} | {:ok, %{optional(atom) => any}}
   def create(params), do: DBContext.create_incident(params)
   def create!(params), do: DBContext.create_incident!(params)
 
@@ -17,9 +22,4 @@ defmodule IncidentReport.Service.Incident do
 
   def update(struct, params), do: DBContext.update_incident(struct, params)
   def update!(struct, params), do: DBContext.update_incident!(struct, params)
-
-
-
-
-
 end
