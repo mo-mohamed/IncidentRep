@@ -1,11 +1,11 @@
 defmodule IncidentReport.Schema.IncidentNotificationTest do
+  use ExUnit.Case, async: false
   use IncidentReportWeb.ConnCase
   import IncidentReport.Factory
-  alias IncidentReport.Schema
-  alias IncidentReport.Service.IncidentNotification
+  alias IncidentReport.Schema.IncidentNotification
 
-  describe "Create" do
-    test "successful create" do
+  describe "changeset" do
+    test "valid changeset for valid params" do
       country = insert(:country, %{})
 
       params = %{
@@ -20,11 +20,11 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         nearest_landmark: "play ground"
       }
 
-      assert {:ok, %Schema.IncidentNotification{} = incident_notification} =
-               IncidentNotification.create(params)
+      changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
+      assert changeset.valid?
     end
 
-    test "returns error when name is missing" do
+    test "has errors when name is missing" do
       country = insert(:country, %{})
 
       params = %{
@@ -38,14 +38,14 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         nearest_landmark: "play ground"
       }
 
-      assert {:error, changeset} = IncidentNotification.create(params)
+      changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
       refute changeset.valid?
 
       assert assert changeset.errors |> List.first() ==
                       {:name, {"can't be blank", [validation: :required]}}
     end
 
-    test "returns error when city is missing" do
+    test "has errors when city is missing" do
       country = insert(:country, %{})
 
       params = %{
@@ -59,14 +59,13 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         nearest_landmark: "play ground"
       }
 
-      assert {:error, changeset} = IncidentNotification.create(params)
+      changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
       refute changeset.valid?
-
       assert assert changeset.errors |> List.first() ==
                       {:city, {"can't be blank", [validation: :required]}}
     end
 
-    test "returns error when nearest landmark is missing" do
+    test "has errors when nearest_landmark is missing" do
       country = insert(:country, %{})
 
       params = %{
@@ -80,14 +79,13 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         city: "city"
       }
 
-      assert {:error, changeset} = IncidentNotification.create(params)
+      changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
       refute changeset.valid?
-
       assert assert changeset.errors |> List.first() ==
                       {:nearest_landmark, {"can't be blank", [validation: :required]}}
     end
 
-    test "returns error when image_url is missing" do
+    test "has errors when image_url is missing" do
       country = insert(:country, %{})
 
       params = %{
@@ -102,16 +100,13 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         nearest_landmark: "play ground"
       }
 
-      assert {:error, changeset} = IncidentNotification.create(params)
+      changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
       refute changeset.valid?
-
       assert assert changeset.errors |> List.first() ==
                       {:image_url, {"can't be blank", [validation: :required]}}
     end
-  end
 
-  describe "Update" do
-    test "successful update" do
+    test "success changes againts an already structed struct" do
       incident_notification = insert(:incident_notification)
 
       params = %{
@@ -120,13 +115,14 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         city: "city2"
       }
 
-      assert {:ok, incident_updated} = IncidentNotification.update(incident_notification, params)
-      assert incident_updated.phone_number == "phone_number2"
-      assert incident_updated.district == "some district2"
-      assert incident_updated.city == "city2"
+      changeset = IncidentNotification.changeset(incident_notification, params)
+      assert changeset.valid?
+      assert changeset.changes.phone_number == "phone_number2"
+      assert changeset.changes.district == "some district2"
+      assert changeset.changes.city == "city2"
     end
 
-    test "returns error when city is empty" do
+    test "has errors when city is missing for updating a changeset" do
       incident_notification = insert(:incident_notification)
 
       params = %{
@@ -137,13 +133,13 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         city: nil
       }
 
-      assert {:error, changeset} = IncidentNotification.update(incident_notification, params)
-
+      changeset = IncidentNotification.changeset(incident_notification, params)
+      refute changeset.valid?
       assert changeset.errors |> List.first() ==
                {:city, {"can't be blank", [validation: :required]}}
     end
 
-    test "returns error when nearest landmark is empty" do
+    test "has errors when nearest_landmark is missing for updating a changeset" do
       incident_notification = insert(:incident_notification)
 
       params = %{
@@ -155,13 +151,13 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         nearest_landmark: nil
       }
 
-      assert {:error, changeset} = IncidentNotification.update(incident_notification, params)
-
+      changeset = IncidentNotification.changeset(incident_notification, params)
+      refute changeset.valid?
       assert changeset.errors |> List.first() ==
                {:nearest_landmark, {"can't be blank", [validation: :required]}}
     end
 
-    test "returns error when image url landmark is empty" do
+    test "has errors when image_url is missing for updating a changeset" do
       incident_notification = insert(:incident_notification)
 
       params = %{
@@ -170,8 +166,8 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         district: "some district2"
       }
 
-      assert {:error, changeset} = IncidentNotification.update(incident_notification, params)
-
+      changeset = IncidentNotification.changeset(incident_notification, params)
+      refute changeset.valid?
       assert changeset.errors |> List.first() ==
                {:image_url, {"can't be blank", [validation: :required]}}
     end

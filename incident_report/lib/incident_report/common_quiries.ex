@@ -327,15 +327,18 @@ defmodule IncidentReport.DAL.CommonQueries do
   end
 
   def changeset(module) do
+    IO.puts("hellooo")
     struct(module)
     |> module.changeset(%{})
   end
 
   def changeset(module, %{} = struct) do
+    IO.puts("hellooo22")
     module.changeset(struct, %{})
   end
 
   def changeset(module, %{} = struct, %{} = params) do
+    IO.puts("hellooo333")
     module.changeset(struct, params)
   end
 
