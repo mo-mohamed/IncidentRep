@@ -20,7 +20,7 @@ defmodule IncidentReport.MixProject do
   def application do
     [
       mod: {IncidentReport.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :swoosh, :gen_smtp, :runtime_tools]
     ]
   end
 
@@ -48,7 +48,12 @@ defmodule IncidentReport.MixProject do
       {:cowboy, "< 2.8.0", override: true},
       {:ecto_enum, "~> 1.4"},
       {:ex_machina, "~> 2.4"},
-      {:ecto_resource, "~> 1.2.0"}
+      {:ecto_resource, "~> 1.2.0"},
+      {:mailman, "~> 0.4.2"},
+      {:swoosh, "~> 1.0"},
+      {:gen_smtp, "~> 0.13"},
+      {:hackney, "~> 1.9"},
+      {:phoenix_swoosh, "~> 0.3"}
     ]
   end
 

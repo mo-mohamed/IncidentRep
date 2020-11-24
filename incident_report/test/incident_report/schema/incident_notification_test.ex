@@ -19,11 +19,14 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         city: "city",
         nearest_landmark: "play ground"
       }
-      assert {:ok, %Schema.IncidentNotification{} = incident_notification} = IncidentNotification.create(params)
+
+      assert {:ok, %Schema.IncidentNotification{} = incident_notification} =
+               IncidentNotification.create(params)
     end
 
     test "returns error when name is missing" do
       country = insert(:country, %{})
+
       params = %{
         email: "mostafa@mail.com",
         phone_number: "phone_number",
@@ -34,13 +37,17 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         city: "city",
         nearest_landmark: "play ground"
       }
+
       assert {:error, changeset} = IncidentNotification.create(params)
       refute changeset.valid?
-      assert assert changeset.errors |> List.first() == {:name, {"can't be blank", [validation: :required]}}
+
+      assert assert changeset.errors |> List.first() ==
+                      {:name, {"can't be blank", [validation: :required]}}
     end
 
     test "returns error when city is missing" do
       country = insert(:country, %{})
+
       params = %{
         name: "Mostafa Mohamed",
         email: "mostafa@mail.com",
@@ -51,13 +58,17 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         district: "some district",
         nearest_landmark: "play ground"
       }
+
       assert {:error, changeset} = IncidentNotification.create(params)
       refute changeset.valid?
-      assert assert changeset.errors |> List.first() == {:city, {"can't be blank", [validation: :required]}}
+
+      assert assert changeset.errors |> List.first() ==
+                      {:city, {"can't be blank", [validation: :required]}}
     end
 
     test "returns error when nearest landmark is missing" do
       country = insert(:country, %{})
+
       params = %{
         name: "Mostafa Mohamed",
         email: "mostafa@mail.com",
@@ -68,13 +79,17 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         district: "some district",
         city: "city"
       }
+
       assert {:error, changeset} = IncidentNotification.create(params)
       refute changeset.valid?
-      assert assert changeset.errors |> List.first() == {:nearest_landmark, {"can't be blank", [validation: :required]}}
+
+      assert assert changeset.errors |> List.first() ==
+                      {:nearest_landmark, {"can't be blank", [validation: :required]}}
     end
 
     test "returns error when image_url is missing" do
       country = insert(:country, %{})
+
       params = %{
         name: "Mostafa Mohamed",
         email: "mostafa@mail.com",
@@ -86,9 +101,12 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         city: "city",
         nearest_landmark: "play ground"
       }
+
       assert {:error, changeset} = IncidentNotification.create(params)
       refute changeset.valid?
-      assert assert changeset.errors |> List.first() == {:image_url, {"can't be blank", [validation: :required]}}
+
+      assert assert changeset.errors |> List.first() ==
+                      {:image_url, {"can't be blank", [validation: :required]}}
     end
   end
 
@@ -120,7 +138,9 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
       }
 
       assert {:error, changeset} = IncidentNotification.update(incident_notification, params)
-      assert changeset.errors |> List.first() == {:city, {"can't be blank", [validation: :required]}}
+
+      assert changeset.errors |> List.first() ==
+               {:city, {"can't be blank", [validation: :required]}}
     end
 
     test "returns error when nearest landmark is empty" do
@@ -136,7 +156,9 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
       }
 
       assert {:error, changeset} = IncidentNotification.update(incident_notification, params)
-      assert changeset.errors |> List.first() == {:nearest_landmark, {"can't be blank", [validation: :required]}}
+
+      assert changeset.errors |> List.first() ==
+               {:nearest_landmark, {"can't be blank", [validation: :required]}}
     end
 
     test "returns error when image url landmark is empty" do
@@ -145,11 +167,13 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
       params = %{
         phone_number: "phone_number2",
         image_url: nil,
-        district: "some district2",
+        district: "some district2"
       }
 
       assert {:error, changeset} = IncidentNotification.update(incident_notification, params)
-      assert changeset.errors |> List.first() == {:image_url, {"can't be blank", [validation: :required]}}
+
+      assert changeset.errors |> List.first() ==
+               {:image_url, {"can't be blank", [validation: :required]}}
     end
   end
 end

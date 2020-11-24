@@ -117,11 +117,11 @@ defmodule IncidentReport.Schema.IncidentTest do
       }
 
       assert {:error, changeset} = Incident.update(incident, update_params)
-      assert changeset.errors |> List.first() ==
-        {:status,
-         {"is invalid",
-          [validation: :inclusion, enum: ["ready", "suspended", "finished", "processing"]]}}
 
+      assert changeset.errors |> List.first() ==
+               {:status,
+                {"is invalid",
+                 [validation: :inclusion, enum: ["ready", "suspended", "finished", "processing"]]}}
     end
 
     test "returns error when setting image url to null" do
@@ -133,7 +133,9 @@ defmodule IncidentReport.Schema.IncidentTest do
       }
 
       assert {:error, changeset} = Incident.update(incident, update_params)
-      assert changeset.errors |> List.first() == {:image_url, {"can't be blank", [validation: :required]}}
+
+      assert changeset.errors |> List.first() ==
+               {:image_url, {"can't be blank", [validation: :required]}}
     end
   end
 end

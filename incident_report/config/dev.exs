@@ -10,6 +10,16 @@ config :incident_report, IncidentReport.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+
+config :incident_report, IncidentReport.Service.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  relay: "smtp.gmail.com",
+  username: "mostafa.a.mohamed90@gmail.com",
+  password: "At@yefM@ilP@ss123",
+  tls: :always,
+  auth: :always,
+  port: 587
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
