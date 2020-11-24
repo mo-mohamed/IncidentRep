@@ -1,25 +1,39 @@
 defmodule IncidentReport.Service.Incident do
-  alias IncidentReport.DAL.Context, as: DBContext
+  use IncidentReport.DAL.CommonQueries, schema_module: IncidentReport.Schema.Incident
+  alias IncidentReport.Service.LocalFilehandler
 
-  def all, do: DBContext.all_incidents()
-  def all(params), do: DBContext.all_incidents(params)
+  def receive(params) do
+    IncidentReport.Repo.transaction(fn ->
+      {:ok, file_name} = LocalFilehandler.save_file_from_upload(params["file"])
 
-  def changeset(params),
-    do: IncidentReport.Schema.Incident.changeset(%IncidentReport.Schema.Incident{}, params)
+      params =
+        Map.put(params, "local_image_path", file_name)
+        |> Map.put("country_id", 3)
+        |> Map.drop(["status", "is_verified", "identifier", "number_processed"])
 
-  def changeset(struct, params),
-    do: IncidentReport.Schema.Incident.changeset(struct, params)
+      {:ok, incident} = create(params)
+      base_url = IncidentReportWeb.Endpoint.url()
+      params_encoded = %{"email" => incident.email, "identifier" => incident.identifier} |> URI.encode_query()
+      activation_link = "#{base_url}/api/incident/activate?#{params_encoded}"
+      IncidentReport.Service.IncidentMail.incident_received(incident, activation_link) |> IncidentReport.Service.Mailer.deliver()
 
-  @spec create(map) :: {:error, Ecto.Changeset.t()} | {:ok, %{optional(atom) => any}}
-  def create(params), do: DBContext.create_incident(params)
-  def create!(params), do: DBContext.create_incident!(params)
+      incident
+    end)
+  end
 
-  def delete(params), do: DBContext.delete_incident(params)
-  def delete!(params), do: DBContext.delete_incident!(params)
 
-  def get(params), do: DBContext.get_incident(params)
-  def get!(params), do: DBContext.get_incident!(params)
+  def activate(%{"email" => email, "identifier" => identifier} = _params) do
+      incident = find_by([email: email, identifier: identifier]) |> List.first()
+      case incident do
+        nil -> {:error, :not_found}
+        _ -> activate_incident(incident)
+      end
+  end
 
-  def update(struct, params), do: DBContext.update_incident(struct, params)
-  def update!(struct, params), do: DBContext.update_incident!(struct, params)
+  defp activate_incident(incident) do
+    case incident.is_verified do
+      true -> {:error, :already_active}
+      false -> update(incident, %{is_verified: true})
+    end
+  end
 end

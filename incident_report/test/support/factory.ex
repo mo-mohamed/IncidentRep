@@ -22,7 +22,8 @@ defmodule IncidentReport.Factory do
       notes: "some notes",
       status: "ready",
       is_verified: false,
-      number_processed: 0
+      number_processed: 0,
+      local_image_path: Ecto.UUID.generate()
     }
   end
 

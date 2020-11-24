@@ -53,7 +53,8 @@ defmodule IncidentReport.MixProject do
       {:swoosh, "~> 1.0"},
       {:gen_smtp, "~> 0.13"},
       {:hackney, "~> 1.9"},
-      {:phoenix_swoosh, "~> 0.3"}
+      {:phoenix_swoosh, "~> 0.3"},
+      {:scrivener_ecto, "~> 2.0"}
     ]
   end
 

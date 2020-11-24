@@ -6,6 +6,7 @@ end
 defmodule IncidentReport.Service.IncidentMail do
   use Phoenix.Swoosh, view: IncidentReportWeb.EmailView, layout: {IncidentReportWeb.EmailView, :layout}
   alias Swoosh.Email
+  @spec incident_received(atom | %{email: any, name: any}, any) :: %{assigns: map, private: map}
   def incident_received(incident, activation_link) do
     %Email{}
     |> from("mostafa.a.mohamed90@gmail.com")

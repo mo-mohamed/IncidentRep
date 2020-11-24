@@ -41,7 +41,7 @@ defmodule IncidentReport.Schema.Incident do
     field :status, :string, default: "ready"
     field :number_processed, :integer, default: 0
     field :local_image_path, :string
-    field :identifier, :binary_id, default: Ecto.UUID.generate()
+    field :identifier, :string, default: Ecto.UUID.generate()
     belongs_to(:country, IncidentReport.Schema.Country)
     timestamps()
   end
