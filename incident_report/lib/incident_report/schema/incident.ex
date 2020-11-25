@@ -17,7 +17,8 @@ defmodule IncidentReport.Schema.Incident do
     :country_id,
     :status,
     :is_verified,
-    :local_image_path
+    :local_image_path,
+    :identifier
   ]
 
   @required_attributes_create [
@@ -27,7 +28,8 @@ defmodule IncidentReport.Schema.Incident do
     :status,
     :country_id,
     :status,
-    :local_image_path
+    :local_image_path,
+    :identifier
   ]
 
   schema "incident" do
@@ -41,7 +43,7 @@ defmodule IncidentReport.Schema.Incident do
     field :status, :string, default: "ready"
     field :number_processed, :integer, default: 0
     field :local_image_path, :string
-    field :identifier, :string, default: Ecto.UUID.generate()
+    field :identifier, :string
     belongs_to(:country, IncidentReport.Schema.Country)
     timestamps()
   end

@@ -10,6 +10,7 @@ defmodule IncidentReport.Service.Incident do
         Map.put(params, "local_image_path", file_name)
         |> Map.put("country_id", country.id)
         |> Map.drop(["status", "is_verified", "identifier", "number_processed"])
+        |> Map.put("identifier", Ecto.UUID.generate)
 
       {:ok, incident} = create(params)
       IncidentReport.Mailer.Incident.send_incident_received(incident)
@@ -18,7 +19,7 @@ defmodule IncidentReport.Service.Incident do
   end
 
   def activate(%{"email" => email, "identifier" => identifier} = _params) do
-      incident = find_by([email: email, identifier: identifier]) |> List.first()
+      incident = find_by([email: email, identifier: identifier], preloads: [:country]) |> List.first()
       case incident do
         nil -> {:error, :not_found}
         _ -> activate_incident(incident)
@@ -28,7 +29,10 @@ defmodule IncidentReport.Service.Incident do
   defp activate_incident(incident) do
     case incident.is_verified do
       true -> {:error, :already_active}
-      false -> update(incident, %{is_verified: true})
+      false ->
+        {:ok, incident} = update(incident, %{is_verified: true})
+        IncidentReport.Mailer.Incident.send_incident_activated(incident)
+        {:ok, incident}
     end
   end
 end

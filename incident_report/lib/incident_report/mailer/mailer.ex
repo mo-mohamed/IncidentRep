@@ -19,4 +19,13 @@ defmodule IncidentReport.Mailer.Incident do
     |> render_body("incident_received.html", %{name: incident.name, link: activation_link})
     |> IncidentReport.Mailer.deliver()
   end
+
+  def send_incident_activated(incident) do
+    %Email{}
+    |> from("mostafa.a.mohamed90@gmail.com")
+    |> to(incident.email)
+    |> subject("Incident activated")
+    |> render_body("incident_activated.html", %{incident: incident})
+    |> IncidentReport.Mailer.deliver()
+  end
 end

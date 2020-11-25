@@ -1,6 +1,6 @@
 defmodule IncidentReportWeb.Api.IncidentController do
   use IncidentReportWeb, :controller
-  alias IncidentReportWeb.Api.ErrorView
+  alias IncidentReportWeb.Api.{IncidentView, ErrorView}
   alias IncidentReport.Service.Incident
   alias IncidentReportWeb.Validations.Api.Incident.Create, as: IncidentParamsValidation
 
@@ -11,10 +11,12 @@ defmodule IncidentReportWeb.Api.IncidentController do
       error_views(conn, 400, changeset: paramaters_changset)
     else
       case Incident.receive(params) do
-        {:ok, _incident} ->
+        {:ok, incident} ->
+          incident = incident |> IncidentReport.Repo.preload([:country])
           conn
           |> put_status(:ok)
-          |> json("Thank you, your incident has been saved")
+          |> put_view(IncidentView)
+          |> render("incident_received_activated.json", %{incident: incident, msg: "received and requires verification"})
 
         {:error, %Ecto.Changeset{} = changeset} ->
           error_views(conn, 400, changeset: changeset)
@@ -27,8 +29,13 @@ defmodule IncidentReportWeb.Api.IncidentController do
 
   def activate(conn, params) do
     case Incident.activate(params) do
-      {:error, _} -> Plug.Conn.send_resp(conn, 400, "Incident already activated or not found")
-      {:ok, _} -> Plug.Conn.send_resp(conn, 200, "")
+      {:error, :not_found} ->  error_views(conn, 404, %{errors: "not found"})
+      {:error, :already_active} ->  error_views(conn, 400, %{errors: "already activated"})
+      {:ok, incident} ->
+      conn
+      |> put_status(:ok)
+      |> put_view(IncidentView)
+      |> render("incident_received_activated.json", %{incident: incident, msg: "received and requires verification"})
     end
 
   end

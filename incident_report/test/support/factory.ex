@@ -23,7 +23,8 @@ defmodule IncidentReport.Factory do
       status: "ready",
       is_verified: false,
       number_processed: 0,
-      local_image_path: Ecto.UUID.generate()
+      local_image_path: Ecto.UUID.generate(),
+      identifier: Ecto.UUID.generate()
     }
   end
 

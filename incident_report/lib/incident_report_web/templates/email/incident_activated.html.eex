@@ -1,0 +1,4 @@
+<div>
+  <p> Dear <%= @incident.name %> </p>
+  <p> Your incident has been activated successfully, we will be processing your requests and hopefully we find matches in your incident country </p>
+</div>
