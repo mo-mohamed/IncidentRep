@@ -38,10 +38,7 @@ defmodule IncidentReportWeb.Api.IncidentControllerTest do
     end
 
     test "returns error when  required params are missing (name, email, country, file, phone_number)", %{conn: conn} do
-      country = insert(:country)
-      params = %{
-       notes: "my notes"
-      }
+      params = %{"notes" => "my notes"}
 
       with_mock(IncidentReport.Mailer.Incident, [send_incident_received: fn _ -> :ok end])do
         conn = post(conn, "/api/incident/", params)
