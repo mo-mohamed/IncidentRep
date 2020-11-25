@@ -11,7 +11,7 @@ config :incident_report, IncidentReport.Repo,
   pool_size: 10
 
 
-config :incident_report, IncidentReport.Service.Mailer,
+config :incident_report, IncidentReport.Mailer,
   adapter: Swoosh.Adapters.SMTP,
   relay: "smtp.gmail.com",
   username: "mostafa.a.mohamed90@gmail.com",

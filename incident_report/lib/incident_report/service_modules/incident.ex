@@ -5,22 +5,17 @@ defmodule IncidentReport.Service.Incident do
   def receive(params) do
     IncidentReport.Repo.transaction(fn ->
       {:ok, file_name} = LocalFilehandler.save_file_from_upload(params["file"])
-
+      country = IncidentReport.Service.Country.find_by(name: params["country"]) |> List.first()
       params =
         Map.put(params, "local_image_path", file_name)
-        |> Map.put("country_id", 3)
+        |> Map.put("country_id", country.id)
         |> Map.drop(["status", "is_verified", "identifier", "number_processed"])
 
       {:ok, incident} = create(params)
-      base_url = IncidentReportWeb.Endpoint.url()
-      params_encoded = %{"email" => incident.email, "identifier" => incident.identifier} |> URI.encode_query()
-      activation_link = "#{base_url}/api/incident/activate?#{params_encoded}"
-      IncidentReport.Service.IncidentMail.incident_received(incident, activation_link) |> IncidentReport.Service.Mailer.deliver()
-
+      IncidentReport.Mailer.Incident.send_incident_received(incident)
       incident
     end)
   end
-
 
   def activate(%{"email" => email, "identifier" => identifier} = _params) do
       incident = find_by([email: email, identifier: identifier]) |> List.first()

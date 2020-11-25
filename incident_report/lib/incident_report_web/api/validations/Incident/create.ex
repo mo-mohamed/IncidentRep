@@ -7,13 +7,15 @@ defmodule IncidentReportWeb.Validations.Api.Incident.Create do
     :relation,
     :email,
     :phone_number,
-    :notes
+    :notes,
+    :country
   ]
 
   @required_attributes [
     :name,
     :email,
-    :phone_number
+    :phone_number,
+    :country
   ]
 
   schema "incident_create_params" do
@@ -22,6 +24,7 @@ defmodule IncidentReportWeb.Validations.Api.Incident.Create do
     field :email, :string
     field :phone_number, :string
     field :notes, :string
+    field :country, :string
   end
 
   @doc false
@@ -47,10 +50,7 @@ defmodule IncidentReportWeb.Validations.Api.Incident.Create do
          %{valid?: true} = changeset,
          %{"file" => %Plug.Upload{filename: file_name} = _file} = _attrs
        ) do
-    IO.inspect(file_name, label: "file name")
     file_ext = Path.extname(file_name)
-    IO.inspect(file_ext, label: "file name")
-
     case file_ext in IncidentReport.Service.LocalFilehandler.supported_images_types() do
       true ->
         changeset

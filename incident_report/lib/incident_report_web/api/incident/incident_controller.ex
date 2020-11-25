@@ -1,9 +1,7 @@
 defmodule IncidentReportWeb.Api.IncidentController do
   use IncidentReportWeb, :controller
   alias IncidentReportWeb.Api.ErrorView
-
   alias IncidentReport.Service.Incident
-
   alias IncidentReportWeb.Validations.Api.Incident.Create, as: IncidentParamsValidation
 
   def create(conn, params) do
@@ -12,14 +10,17 @@ defmodule IncidentReportWeb.Api.IncidentController do
     if paramaters_changset.valid? == false do
       error_views(conn, 400, changeset: paramaters_changset)
     else
-      case Incident.receive(params)do
+      case Incident.receive(params) do
         {:ok, _incident} ->
           conn
           |> put_status(:ok)
           |> json("Thank you, your incident has been saved")
 
-        {:error, changeset} ->
+        {:error, %Ecto.Changeset{} = changeset} ->
           error_views(conn, 400, changeset: changeset)
+
+        {:error, error} ->
+          error_views(conn, 400, error: error)
       end
     end
   end
