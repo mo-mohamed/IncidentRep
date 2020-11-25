@@ -1,7 +1,6 @@
 defmodule IncidentReportWeb.Validations.Api.Incident.Create do
   use Ecto.Schema
   import Ecto.Changeset
-
   @all_attributes [
     :name,
     :relation,
@@ -27,6 +26,7 @@ defmodule IncidentReportWeb.Validations.Api.Incident.Create do
     field :country, :string
   end
 
+
   @doc false
   def changeset(struct, attrs) do
     struct
@@ -37,8 +37,7 @@ defmodule IncidentReportWeb.Validations.Api.Incident.Create do
     |> validate_email(attrs)
   end
 
-  defp validate_file_exists(changeset, %{"file" => %Plug.Upload{} = _file} = _attrs),
-    do: changeset
+  defp validate_file_exists(changeset, %{"file" => %Plug.Upload{} = _file} = _attrs), do: changeset
 
   defp validate_file_exists(changeset, _attrs) do
     changeset
@@ -46,15 +45,12 @@ defmodule IncidentReportWeb.Validations.Api.Incident.Create do
     |> add_error(:file, "image is required", [])
   end
 
-  defp validate_image_file_extension(
-         %{valid?: true} = changeset,
-         %{"file" => %Plug.Upload{filename: file_name} = _file} = _attrs
-       ) do
+
+
+  defp validate_image_file_extension(%{valid?: true} = changeset, %{"file" => %Plug.Upload{filename: file_name} = _file} = _attrs) do
     file_ext = Path.extname(file_name)
     case file_ext in IncidentReport.Service.LocalFilehandler.supported_images_types() do
-      true ->
-        changeset
-
+      true -> changeset
       false ->
         changeset
         |> Map.put(:valid?, false)
@@ -64,15 +60,16 @@ defmodule IncidentReportWeb.Validations.Api.Incident.Create do
 
   defp validate_image_file_extension(%{valid?: false} = changeset, _attrs), do: changeset
 
+
+
+
   defp validate_email(%{valid?: true} = changeset, %{"email" => email} = _attrs) do
     case Regex.match?(~r/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, email) do
-      true ->
-        changeset
-
+      true -> changeset
       false ->
-        changeset
-        |> Map.put(:valid?, false)
-        |> add_error(:email, "invalid", [])
+      changeset
+      |> Map.put(:valid?, false)
+      |> add_error(:email, "invalid", [])
     end
   end
 
