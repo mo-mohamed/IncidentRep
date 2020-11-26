@@ -1,37 +1,14 @@
 defmodule IncidentReport.Schema.IncidentTest do
+  use ExUnit.Case, async: false
   use IncidentReportWeb.ConnCase
   import IncidentReport.Factory
-  alias IncidentReport.Schema
-  alias IncidentReport.Service.IncidentNotification
+  alias IncidentReport.Schema.Incident
 
-  describe "Create" do
-    test "changeset" do
+  describe "changeset" do
+    test "has erros when name is missing" do
       country = insert(:country, %{})
 
-      incident_report_params = %{
-        name: "Mostafa Mohamed",
-        email: "mostafa@mail.com",
-        phone_number: "phone_number",
-        image_url: "URL",
-        country_id: country.id,
-        notes: "some notes",
-        district: "district area",
-        nearest_landmark: "play ground"
-      }
-
-      result = IReport.create(incident_report_params)
-      assert {:ok, %Schema.Incident{} = incident} = result
-      # default values
-      assert incident.status == "ready"
-      assert incident.is_verified == false
-      assert incident.number_processed == 0
-      refute incident.identifier == nil
-    end
-
-    test "returns error when name is missing" do
-      country = insert(:country, %{})
-
-      incident_params = %{
+      params = %{
         relation: "Father",
         email: "mostafa@mail.com",
         phone_number: "phone_number",
@@ -40,17 +17,17 @@ defmodule IncidentReport.Schema.IncidentTest do
         notes: "some notes"
       }
 
-      assert {:error, %Ecto.Changeset{} = changeset} = Incident.create(incident_params)
+      changeset = Incident.changeset(%Incident{}, params)
       refute changeset.valid?
 
       assert changeset.errors |> List.first() ==
                {:name, {"can't be blank", [validation: :required]}}
     end
 
-    test "returns error when image_url is missing" do
+    test "has errors when local image path is missing" do
       country = insert(:country, %{})
 
-      incident_params = %{
+      params = %{
         relation: "Father",
         name: "Mostafa Mohamed",
         email: "mostafa@mail.com",
@@ -59,17 +36,17 @@ defmodule IncidentReport.Schema.IncidentTest do
         notes: "some notes"
       }
 
-      changeset = Incident.changeset(incident_params)
+      changeset = Incident.changeset(%Incident{}, params)
       refute changeset.valid?
 
       assert changeset.errors |> List.first() ==
-               {:image_url, {"can't be blank", [validation: :required]}}
+               {:local_image_path, {"can't be blank", [validation: :required]}}
     end
 
-    test "returns invalid changeset for invalid status" do
+    test "has errors when status is invalid" do
       country = insert(:country, %{})
 
-      incident_params = %{
+      params = %{
         name: "Mostafa Mohamed",
         relation: "Father",
         email: "mostafa@mail.com",
@@ -80,7 +57,7 @@ defmodule IncidentReport.Schema.IncidentTest do
         status: "invalid-status"
       }
 
-      assert {:error, %Ecto.Changeset{} = changeset} = Incident.create(incident_params)
+      changeset = Incident.changeset(%Incident{}, params)
       refute changeset.valid?
 
       assert changeset.errors |> List.first() ==
@@ -88,52 +65,37 @@ defmodule IncidentReport.Schema.IncidentTest do
                 {"is invalid",
                  [validation: :inclusion, enum: ["ready", "suspended", "finished", "processing"]]}}
     end
-  end
 
-  describe "Update" do
-    test "successful update" do
+    test "valid changeset" do
       incident = insert(:incident)
       refute incident.is_verified
       assert incident.status == "ready"
 
-      update_params = %{
+      params = %{
         "is_verified" => true,
         "name" => "other name",
         "status" => "suspended"
       }
 
-      assert {:ok, incident_updated} = Incident.update(incident, update_params)
-      assert incident_updated.status == "suspended"
-      assert incident_updated.name == "other name"
-      assert incident_updated.is_verified
+      changeset = Incident.changeset(incident, params)
+      assert changeset.changes.status == "suspended"
+      assert changeset.changes.name == "other name"
+      assert changeset.changes.is_verified
     end
 
-    test "returns error when status is invalid" do
+    test "has errors changing exisiting changeset with invalid status" do
       incident = insert(:incident)
       assert incident.status == "ready"
 
-      update_params = %{
+      params = %{
         "status" => "invalid"
       }
 
-      assert {:error, changeset} = Incident.update(incident, update_params)
+      changeset = Incident.changeset(incident, params)
       assert changeset.errors |> List.first() ==
-        {:status,
-         {"is invalid",
-          [validation: :inclusion, enum: ["ready", "suspended", "finished", "processing"]]}}
-
-    end
-
-    test "returns error when setting image url to null" do
-      incident = insert(:incident)
-      assert incident.status == "ready"
-
-      update_params = %{
-        "image_url" => nil
-      }
-
-      assert {:error, changeset} = Incident.update(incident, update_params)
-      assert changeset.errors |> List.first() == {:image_url, {"can't be blank", [validation: :required]}}
+               {:status,
+                {"is invalid",
+                 [validation: :inclusion, enum: ["ready", "suspended", "finished", "processing"]]}}
     end
   end
 end

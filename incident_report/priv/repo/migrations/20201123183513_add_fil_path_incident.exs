@@ -3,7 +3,7 @@ defmodule IncidentReport.Repo.Migrations.AddFilPathIncident do
 
   def up do
     alter table("incident") do
-      add(:local_image_path, :text, null: false)
+      add(:local_image_path, :string, null: false)
     end
   end
 

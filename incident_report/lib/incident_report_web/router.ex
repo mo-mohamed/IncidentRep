@@ -22,6 +22,7 @@ defmodule IncidentReportWeb.Router do
   scope "/api", IncidentReportWeb.Api, as: :api do
     pipe_through :api
     resources "/incident", IncidentController, only: [:create]
+    get("/incident/activate", IncidentController, :activate)
   end
 
   # Other scopes may use custom stacks.

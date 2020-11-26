@@ -1,5 +1,6 @@
 defmodule IncidentReport.Service.LocalFilehandler do
-@supported_images_format [".jpg", ".jpeg", ".png", ".JPG"]
+  @supported_images_format [".jpg", ".jpeg", ".png", ".JPG"]
+
 
   def save_file_from_upload(file_plug) do
     file_name = Ecto.UUID.generate()

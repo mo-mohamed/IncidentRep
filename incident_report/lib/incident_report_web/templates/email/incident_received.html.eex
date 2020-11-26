@@ -1,0 +1,4 @@
+<div>
+  <p> Dear <%= @name %> </p>
+  <p> Please clik on <a href="<%= @link %>">this link to activate your incident</a> </p>
+</div>

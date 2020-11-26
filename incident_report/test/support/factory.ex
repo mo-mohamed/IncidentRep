@@ -18,11 +18,15 @@ defmodule IncidentReport.Factory do
       email: "mostafa@mail.com",
       phone_number: "phone_number",
       image_url: "URL",
+      activation_status: "inactive",
       country_id: country.id,
+      country: country,
       notes: "some notes",
       status: "ready",
       is_verified: false,
-      number_processed: 0
+      number_processed: 0,
+      local_image_path: Ecto.UUID.generate(),
+      identifier: Ecto.UUID.generate()
     }
   end
 
