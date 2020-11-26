@@ -43,7 +43,9 @@ defmodule IncidentReport.Factory do
       is_verified: false,
       city: "Irving",
       district: "district",
-      nearest_landmark: "nearesr landmark"
+      nearest_landmark: "nearesr landmark",
+      local_image_path: Ecto.UUID.generate(),
+      identifier: Ecto.UUID.generate()
     }
   end
 end

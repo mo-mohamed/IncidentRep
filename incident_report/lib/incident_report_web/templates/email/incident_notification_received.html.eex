@@ -1,0 +1,4 @@
+<div>
+  <p> Dear <%= @name %> </p>
+  <p> Thank you for submitting this incident, we will be looking in our database if someone has a missing child that matches your data. </p>
+</div>
