@@ -11,6 +11,7 @@ defmodule IncidentReport.Service.Incident do
         |> Map.put("country_id", country.id)
         |> Map.drop(["status", "is_verified", "identifier", "number_processed"])
         |> Map.put("identifier", Ecto.UUID.generate)
+        |> Map.put("activation_status", "inactive")
 
       {:ok, incident} = create(params)
       IncidentReport.Mailer.Incident.send_incident_received(incident)
@@ -30,7 +31,7 @@ defmodule IncidentReport.Service.Incident do
     case incident.is_verified do
       true -> {:error, :already_active}
       false ->
-        {:ok, incident} = update(incident, %{is_verified: true})
+        {:ok, incident} = update(incident, %{is_verified: true, activation_status: "active"})
         IncidentReport.Mailer.Incident.send_incident_activated(incident)
         {:ok, incident}
     end

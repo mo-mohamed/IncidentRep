@@ -18,7 +18,8 @@ defmodule IncidentReport.Schema.Incident do
     :status,
     :is_verified,
     :local_image_path,
-    :identifier
+    :identifier,
+    :activation_status
   ]
 
   @required_attributes_create [
@@ -29,7 +30,8 @@ defmodule IncidentReport.Schema.Incident do
     :country_id,
     :status,
     :local_image_path,
-    :identifier
+    :identifier,
+    :activation_status
   ]
 
   schema "incident" do
@@ -44,6 +46,7 @@ defmodule IncidentReport.Schema.Incident do
     field :number_processed, :integer, default: 0
     field :local_image_path, :string
     field :identifier, :string
+    field :activation_status, :string
     belongs_to(:country, IncidentReport.Schema.Country)
     timestamps()
   end
@@ -55,6 +58,7 @@ defmodule IncidentReport.Schema.Incident do
     |> validate_required(@required_attributes_create)
     |> foreign_key_constraint(:country_id)
     |> validate_inclusion(:status, IncidentReportTypes.incident_status())
+    |> validate_inclusion(:activation_status, IncidentReportTypes.incident_activation_status())
     |> validate_length(:name, max: 150, message: "name should be max of 150 characters")
     |> validate_length(:relation, max: 40, message: "relation should be max of 40 characters")
     |> validate_length(:phone_number, max: 40, message: "city should be max of 40 characters")

@@ -13,6 +13,7 @@ defmodule IncidentReport.Repo.Migrations.CreateIncidentTable do
       add(:notes, :string)
       add(:status, :string, null: false, default: "ready")
       add(:identifier, :string, null: false)
+      add(:activation_status, :string, null: false)
       add(:number_processed, :integer, null: false, default: 0)
       add(:country_id, references(:country, on_delete: :nothing), null: false)
       timestamps()

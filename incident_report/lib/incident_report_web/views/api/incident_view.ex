@@ -3,14 +3,15 @@ defmodule IncidentReportWeb.Api.IncidentView do
 
   def render("incident_received_activated.json", %{incident: incident, msg: msg}) do
     %{
-      status: msg,
+      activation_status: incident.activation_status,
       id: incident.identifier,
       name: incident.name,
       relation: incident.relation,
       email: incident.email,
       phone_number: incident.phone_number,
       country: incident.country.name,
-      notes: incident.notes
+      notes: incident.notes,
+      message: msg
     }
   end
 

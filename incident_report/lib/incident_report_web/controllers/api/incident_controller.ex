@@ -35,7 +35,7 @@ defmodule IncidentReportWeb.Api.IncidentController do
       conn
       |> put_status(:ok)
       |> put_view(IncidentView)
-      |> render("incident_received_activated.json", %{incident: incident, msg: "received and requires verification"})
+      |> render("incident_received_activated.json", %{incident: incident, msg: "activated successfully"})
     end
 
   end

@@ -17,4 +17,8 @@ defmodule IncidentReportTypes do
   def incident_disregard_reason do
     ["no_match", "low_match"]
   end
+
+  def incident_activation_status do
+    ["active", "inactive"]
+  end
 end
