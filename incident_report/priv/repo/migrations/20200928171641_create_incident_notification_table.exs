@@ -11,9 +11,10 @@ defmodule IncidentReport.Repo.Migrations.CreateIncidentReportTable do
       add(:district, :string)
       add(:nearest_landmark, :string)
       add(:image_url, :string)
-      add(:identifier, :binary_id, null: false)
+      add(:identifier, :string, null: false)
       add(:is_verified, :boolean, null: false, default: false)
       add(:notes, :string)
+      add(:local_image_path, :string, null: false)
       add(:country_id, references(:country, on_delete: :nothing), null: false)
       timestamps()
     end

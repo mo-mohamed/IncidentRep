@@ -17,7 +17,9 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         notes: "some notes",
         district: "some district",
         city: "city",
-        nearest_landmark: "play ground"
+        nearest_landmark: "play ground",
+        identifier: Ecto.UUID.generate(),
+        local_image_path: Ecto.UUID.generate()
       }
 
       changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
@@ -45,67 +47,6 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
                       {:name, {"can't be blank", [validation: :required]}}
     end
 
-    test "has errors when city is missing" do
-      country = insert(:country, %{})
-
-      params = %{
-        name: "Mostafa Mohamed",
-        email: "mostafa@mail.com",
-        phone_number: "phone_number",
-        image_url: "URL",
-        country_id: country.id,
-        notes: "some notes",
-        district: "some district",
-        nearest_landmark: "play ground"
-      }
-
-      changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
-      refute changeset.valid?
-      assert assert changeset.errors |> List.first() ==
-                      {:city, {"can't be blank", [validation: :required]}}
-    end
-
-    test "has errors when nearest_landmark is missing" do
-      country = insert(:country, %{})
-
-      params = %{
-        name: "Mostafa Mohamed",
-        email: "mostafa@mail.com",
-        phone_number: "phone_number",
-        image_url: "URL",
-        country_id: country.id,
-        notes: "some notes",
-        district: "some district",
-        city: "city"
-      }
-
-      changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
-      refute changeset.valid?
-      assert assert changeset.errors |> List.first() ==
-                      {:nearest_landmark, {"can't be blank", [validation: :required]}}
-    end
-
-    test "has errors when image_url is missing" do
-      country = insert(:country, %{})
-
-      params = %{
-        name: "Mostafa Mohamed",
-        email: "mostafa@mail.com",
-        phone_number: "phone_number",
-        image_url: nil,
-        country_id: country.id,
-        notes: "some notes",
-        district: "some district",
-        city: "city",
-        nearest_landmark: "play ground"
-      }
-
-      changeset = IncidentNotification.changeset(%IncidentNotification{}, params)
-      refute changeset.valid?
-      assert assert changeset.errors |> List.first() ==
-                      {:image_url, {"can't be blank", [validation: :required]}}
-    end
-
     test "success changes againts an already structed struct" do
       incident_notification = insert(:incident_notification)
 
@@ -122,24 +63,24 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
       assert changeset.changes.city == "city2"
     end
 
-    test "has errors when city is missing for updating a changeset" do
+    test "has errors when email is null for updating a changeset" do
       incident_notification = insert(:incident_notification)
 
       params = %{
-        email: "mostafa@mail.com",
         phone_number: "phone_number2",
         image_url: "URL",
         district: "some district2",
-        city: nil
+        email: nil,
+        identifier: Ecto.UUID.generate()
       }
 
       changeset = IncidentNotification.changeset(incident_notification, params)
       refute changeset.valid?
       assert changeset.errors |> List.first() ==
-               {:city, {"can't be blank", [validation: :required]}}
+               {:email, {"can't be blank", [validation: :required]}}
     end
 
-    test "has errors when nearest_landmark is missing for updating a changeset" do
+    test "has errors when local image path is missing for updating a changeset" do
       incident_notification = insert(:incident_notification)
 
       params = %{
@@ -148,28 +89,29 @@ defmodule IncidentReport.Schema.IncidentNotificationTest do
         image_url: "URL",
         district: "some district2",
         city: "city",
-        nearest_landmark: nil
+        local_image_path: nil
       }
 
       changeset = IncidentNotification.changeset(incident_notification, params)
       refute changeset.valid?
       assert changeset.errors |> List.first() ==
-               {:nearest_landmark, {"can't be blank", [validation: :required]}}
+               {:local_image_path, {"can't be blank", [validation: :required]}}
     end
 
-    test "has errors when image_url is missing for updating a changeset" do
+    test "has errors when phoe_number is null for updating a changeset" do
       incident_notification = insert(:incident_notification)
 
       params = %{
-        phone_number: "phone_number2",
+        phone_number: nil,
         image_url: nil,
-        district: "some district2"
+        district: "some district2",
+        identifier: Ecto.UUID.generate()
       }
 
       changeset = IncidentNotification.changeset(incident_notification, params)
       refute changeset.valid?
       assert changeset.errors |> List.first() ==
-               {:image_url, {"can't be blank", [validation: :required]}}
+               {:phone_number, {"can't be blank", [validation: :required]}}
     end
   end
 end

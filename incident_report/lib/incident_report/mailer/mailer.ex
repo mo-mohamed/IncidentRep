@@ -13,7 +13,7 @@ defmodule IncidentReport.Mailer.Incident do
     activation_link = "#{base_url}/api/incident/activate?#{params_encoded}"
 
     %Email{}
-    |> from("mostafa.a.mohamed90@gmail.com")
+    |> from(System.get_env("INCIDENT_EMAIL"))
     |> to(incident.email)
     |> subject("Incident Received - Verification Required")
     |> render_body("incident_received.html", %{name: incident.name, link: activation_link})
@@ -22,10 +22,25 @@ defmodule IncidentReport.Mailer.Incident do
 
   def send_incident_activated(incident) do
     %Email{}
-    |> from("mostafa.a.mohamed90@gmail.com")
+    |> from(System.get_env("INCIDENT_EMAIL"))
     |> to(incident.email)
     |> subject("Incident activated")
     |> render_body("incident_activated.html", %{incident: incident})
+    |> IncidentReport.Mailer.deliver()
+  end
+end
+
+
+defmodule IncidentReport.Mailer.IncidentNotification do
+  use Phoenix.Swoosh, view: IncidentReportWeb.EmailView, layout: {IncidentReportWeb.EmailView, :layout}
+  alias Swoosh.Email
+
+  def send_incident_notification_received(incident_notification) do
+    %Email{}
+    |> from(System.get_env("INCIDENT_EMAIL"))
+    |> to(incident_notification.email)
+    |> subject("Incident Received - Thank You!")
+    |> render_body("incident_notification_received.html", %{name: incident_notification.name})
     |> IncidentReport.Mailer.deliver()
   end
 end

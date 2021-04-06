@@ -14,19 +14,18 @@ defmodule IncidentReport.Schema.IncidentNotification do
     :country_id,
     :city,
     :district,
-    :nearest_landmark
+    :nearest_landmark,
+    :identifier,
+    :local_image_path
   ]
 
   @required_attributes [
     :name,
     :email,
     :phone_number,
-    :image_url,
-    :notes,
     :country_id,
-    :city,
-    :district,
-    :nearest_landmark
+    :identifier,
+    :local_image_path
   ]
 
   schema "incident_notification" do
@@ -39,7 +38,8 @@ defmodule IncidentReport.Schema.IncidentNotification do
     field :city, :string
     field :district, :string
     field :nearest_landmark, :string
-    field :identifier, :binary_id, default: Ecto.UUID.generate()
+    field :local_image_path, :string
+    field :identifier, :string
     belongs_to(:country, IncidentReport.Schema.Country)
     timestamps()
   end
@@ -50,8 +50,8 @@ defmodule IncidentReport.Schema.IncidentNotification do
     |> cast(attrs, @all_attributes)
     |> validate_required(@required_attributes)
     |> foreign_key_constraint(:country_id)
-    |> validate_length(:name, max: 50, message: "name should be max of 50 characters")
-    |> validate_length(:phone_number, max: 20, message: "city should be max of 20 characters")
+    |> validate_length(:name, max: 150, message: "name should be max of 50 characters")
+    |> validate_length(:phone_number, max: 40, message: "city should be max of 20 characters")
     |> validate_length(:image_url, max: 500, message: "state should be max of 500 characters")
     |> validate_length(:notes, max: 500, message: "notes should be max of 500 characters")
   end
